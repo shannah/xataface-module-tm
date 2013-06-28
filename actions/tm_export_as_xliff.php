@@ -22,7 +22,8 @@ class actions_tm_export_as_xliff
 		$id = $record->_values['translation_memory_id'];
 		$id = intval($id);
 		
-		$outputFilename = "TranslationMemory_$id.xliff";
+		$dlFileName = "TranslationMemory_$id.xliff";
+		$outputFilename = tempnam('translation_memory','.xliff');//"TranslationMemory_$id.xliff";
 		$xliffApparentSourceFile = "TRANSLATION_MEMORY_ID_$id";	//xliff requires the source file it came from. Dunno what to put here, since it came from the database?
 		
 		
@@ -87,7 +88,7 @@ class actions_tm_export_as_xliff
 		fclose($outFile);
 		
 		//send the file to the browser
-		header("Content-disposition: attachment; filename=$outputFilename");
+		header("Content-disposition: attachment; filename='".basename($dlFileName)."'");
 		header('Content-Transfer-Encoding: binary');
 		readfile($outputFilename);
 		unlink($outputFilename);
