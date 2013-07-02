@@ -233,6 +233,17 @@ class XFTranslationMemory implements XFTranslationDictionary {
 		if ( !$tmrec ) return null;
 		return new XFTranslationMemory($tmrec);
 	}
+        
+        /**
+	 * @brief Loads a translation memory by its translation_memory_id
+	 * @param int $id The translation_memory_id of the memory to load.
+	 * @return XFTranslationMemory
+	 */
+	public static function loadTranslationMemoryByUuid($id){
+		$tmrec  = df_get_record('xf_tm_translation_memories', array('translation_memory_uuid'=>'='.$id));
+		if ( !$tmrec ) return null;
+		return new XFTranslationMemory($tmrec);
+	}
 
 	/**
 	 * @brief Loads the translation memory for a given record.
