@@ -453,6 +453,14 @@ class modules_tm_installer {
 	
 	}
 	
+        public function update_11(){
+	    $sql[] = "ALTER TABLE `xf_tm_translation_memories` ADD COLUMN `translation_memory_uuid` CHAR(36) NULL  AFTER `translation_memory_id`, ADD UNIQUE INDEX `translation_memory_uuid_UNIQUE` (`translation_memory_uuid` ASC)";
+	    $sql[] = "update xf_tm_translation_memories set translation_memory_uuid=UUID()";
+	    df_q($sql);
+	    df_clear_views();
+	    
+	}
+        
 	public static function query($sql){
 		if ( is_array($sql) ){
 			$res = null;
