@@ -127,7 +127,7 @@ class actions_tm_add_translations {
 				try {
 				
 					$tm->addTranslation($str, $translation, $username);
-					$tm->setTranslationStatus($str, $translation, XFTranslationMemory::TRANSLATION_SUBMITTED);
+					$tm->setTranslationStatus($str, $translation, XFTranslationMemory::TRANSLATION_APPROVED);
 					$saved[] = $str;
 					$outTranslations[$str] = $translation;
 				} catch (Exception $ex){

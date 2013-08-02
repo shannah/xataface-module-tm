@@ -646,17 +646,25 @@ class XFTranslationMemory implements XFTranslationDictionary {
 					translation_memory_id='".addslashes($tmid)."' and 
 					translation_id='".addslashes($trid)."'"
 			);
-			
-			$res = df_q("update xf_tm_translation_memory_strings set 
-				current_translation_id='".addslashes($trid)."', 
-				status_id='".addslashes($status)."',
-				flagged=0,
-				last_touched=NOW()
-				where
-					translation_memory_id='".addslashes($tmid)."' and 
-					string_id='".addslashes($strid)."' and 
-					(status_id='".addslashes($status)."' or current_translation_id='".addslashes($trid)."')");
-			if ( mysql_affected_rows(df_db()) == 0 ){
+			$doInsert = false;
+            try {
+                $res = df_q("update xf_tm_translation_memory_strings set 
+                    current_translation_id='".addslashes($trid)."', 
+                    status_id='".addslashes($status)."',
+                    flagged=0,
+                    last_touched=NOW()
+                    where
+                        translation_memory_id='".addslashes($tmid)."' and 
+                        string_id='".addslashes($strid)."' and 
+                        (status_id='".addslashes($status)."' or current_translation_id='".addslashes($trid)."')");
+            } catch ( Exception $ex){
+                $res = df_q("delete from xf_tm_translation_memory_strings where 
+                    translation_memory_id='".addslashes($tmid)."' and 
+                    string_id='".addslashes($strid)."'");
+                $doInsert = true;
+                    
+            }
+			if ( $doInsert or  mysql_affected_rows(df_db()) == 0 ){
 				$res = df_q("insert into xf_tm_translation_memory_strings (
 					translation_memory_id,
 					string_id,

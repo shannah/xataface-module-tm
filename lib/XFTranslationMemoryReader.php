@@ -255,7 +255,7 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 				and s.`hash`='".addslashes($hash)."'
 				and tts.status_id>=".intval($minStatus)."
 				and tts.status_id<=".intval($maxStatus)."
-			order by tts.status_id desc
+			order by tts.status_id desc, tts.last_touched desc
 				";
 
 		$res  = self::q($sql);
@@ -311,7 +311,7 @@ class XFTranslationMemoryReader implements XFTranslationDictionary {
 				and s.`hash` in $hashesStr
 				and tts.status_id>=".intval($minStatus)."
 				and tts.status_id<=".intval($maxStatus)."
-			order by tts.status_id desc
+			order by tts.status_id desc, tts.last_touched desc
 				";
 
 		$res  = self::q($sql);

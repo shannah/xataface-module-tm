@@ -763,7 +763,10 @@
 			'acronym',
 			'font',
 			'sup',
-			'sub'
+			'sub',
+			'g',
+			'x',
+			'v'
 			];
 				
 		
@@ -798,6 +801,7 @@
 	};
 		
 	WebLite.Translator.prototype.extractStrings = function(dom){
+	    var tx;
 		var text = WebLite.Translator.DOM.find(dom,'#text');
 		this.strings = {};
 		var stringsIndex = {};
