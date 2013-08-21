@@ -320,7 +320,7 @@ class TranslationStringParser {
 							$this->matches[] = $tagContents;
 							$outIndex = count($out);
 							$out[] = '<x id="'.($id+1).'"/>';
-							$var = ( strcasecmp($tagName, 'span') === 0 and preg_match('/data-swete-translate="[^"]+"/', $tagContents) );
+							$var = ( strcasecmp($tagName, 'v') === 0 or ( strcasecmp($tagName, 'span') === 0 and preg_match('/data-swete-translate="[^"]+"/', $tagContents) ) );
 							if ( $var ){
 								
 								$out[$outIndex] = '<v id="'.($id+1).'"/>';

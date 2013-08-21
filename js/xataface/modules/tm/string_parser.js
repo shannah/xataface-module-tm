@@ -422,7 +422,7 @@
 						tagName = tagContents.replace(/\//, '');
 					}
 					
-					var isVariableTag = ( tagName.toLowerCase() == 'span' && tagContents.match(/data-swete-translate=/) );
+					var isVariableTag = (tagName.toLowerCase() == 'v' || ( tagName.toLowerCase() == 'span' && tagContents.match(/data-swete-translate=/) ) );
 					
 					var tagObj = {
 						type: 'tag',
