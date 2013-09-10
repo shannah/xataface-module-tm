@@ -20,6 +20,8 @@
  *
  */
 class actions_translate {
+    
+        private static $E_USER=501;
 
 	private $translationMemories = array();
 	
@@ -32,7 +34,19 @@ class actions_translate {
 		return $this->translationMemories[$recordId][$source][$dest];
 	}
 	
-	function handle($params){
+        function handle($params){
+            try {
+                $this->handle2($params);
+            } catch ( Exception $ex){
+                if ( $ex->getCode() === self::$E_USER ){
+                    return Dataface_Error::permissionDenied($ex->getMessage());
+                } else {
+                    throw $ex;
+                }
+            }
+        }
+        
+	function handle2($params){
 		import('modules/tm/lib/XFTranslationMemory.php');
 		$app =& Dataface_Application::getInstance();
 		$query = $app->getQuery();
@@ -42,7 +56,7 @@ class actions_translate {
 		$mod = Dataface_ModuleTool::getInstance()->loadModule('modules_tm');
 		
 		if ( !@$app->_conf['languages'] ){
-			throw new Exception("This application doesn't have multilingual content enabled.");
+			throw new Exception("This application doesn't have multilingual content enabled.", self::$E_USER);
 		}
 		
 
@@ -55,7 +69,7 @@ class actions_translate {
 			}
 		}
 		
-		if ( !isset($dest) ) throw new Exception("Cannot find applicable destination language.");
+		if ( !isset($dest) ) throw new Exception("Cannot find applicable destination language.", self::$E_USER);
 		
 		
 		$records = df_get_selected_records($query);
@@ -72,7 +86,7 @@ class actions_translate {
 		}
 		
 		if ( !$records ){
-			throw new Exception("No records matches your query.");
+			throw new Exception("No records matches your query.", self::$E_USER);
 		}
 		
 		$out = array();
@@ -88,7 +102,7 @@ class actions_translate {
 				$dest = $tm->getDestinationLanguage();
 			}
 			if ( $_tmid and $tmid >= 0 and $tmid !== $_tmid ){
-				throw new Exception("Records on this translation form use different translation memories.  You can only use one translation memory at a time.");
+				throw new Exception("Records on this translation form use different translation memories.  You can only use one translation memory at a time.", self::$E_USER);
 			}
 			if ( $_tmid and $tmid < 0 ) $tmid = $_tmid;
 			
