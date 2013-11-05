@@ -801,6 +801,13 @@
 	};
 		
 	WebLite.Translator.prototype.extractStrings = function(dom){
+	    if ( typeof(WEBLITE_TRANSLATOR_DISABLE_EXTRACTION) !== 'undefined' && WEBLITE_TRANSLATOR_DISABLE_EXTRACTION ){
+	        return [{
+	            element : dom,
+	            text : dom.innerHTML
+	        }];
+	    }
+	
 	    var tx;
 		var text = WebLite.Translator.DOM.find(dom,'#text');
 		this.strings = {};
