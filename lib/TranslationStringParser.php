@@ -174,7 +174,10 @@ class TranslationStringParser {
 					$c = $this->string{$bpos+1};
 					if ( $c === '/' ){
 						if ( !$stack ){
-							throw new Exception("Parse error at position $bpos.  Closing tag found with no matching open tag.");
+							//throw new Exception("Parse error at position $bpos.  Closing tag found with no matching open tag.");
+							$out[] = $this->encode('<').$c;
+							$pos = $bpos+2;
+							continue;
 							
 						}
 						$id = array_pop($stack);
