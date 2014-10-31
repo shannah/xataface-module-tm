@@ -51,9 +51,9 @@ class actions_tm_export_as_xliff
 		$writer->rawSources(true)->rawTranslations(true);
 		
 		//setup the sql for reading the translations
-		$sql = "SELECT s.normalized_value as source, t.normalized_translation_value as target
+		$sql = "SELECT s.normalized_value as source, t.normalized_translation_value as target, tms.translation_memory_id
 				FROM xf_tm_translations t
-					 inner join xf_tm_translation_memory_strings tms on t.string_id = tms.string_id
+					 inner join xf_tm_translation_memory_strings tms on (t.string_id = tms.string_id and t.translation_id=tms.current_translation_id)
 					 inner join xf_tm_strings s on s.string_id = t.string_id
 				WHERE tms.translation_memory_id = $id";	
 		$results = new Dataface_ResultReader($sql, df_db());	//mysql_query($sql, df_db());//, t.language as target_language, s.language as source_language
