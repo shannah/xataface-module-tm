@@ -50,8 +50,8 @@ class actions_tm_import_from_xliff
 		//get the translation memory
 		$app = Dataface_Application::getInstance();
 		$query = &$app->getQuery();
-		if(!array_key_exists('-recordid', $query)) throw new Exception("No translation memory id was specified");
-		$record = df_get_record_by_id($query['-recordid']);
+		//if(!array_key_exists('-recordid', $query)) throw new Exception("No translation memory id was specified");
+		$record = $app->getRecord();
 		//get the translation memory ID
 		if ( !array_key_exists('translation_memory_id' , $record->_values)) throw new Exception("No translation memory id was specified");
 		$id = $record->_values['translation_memory_id'];

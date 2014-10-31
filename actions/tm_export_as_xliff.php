@@ -16,7 +16,7 @@ class actions_tm_export_as_xliff
 		//get the translation memory ID to export
 		$app = Dataface_Application::getInstance();
 		$query = &$app->getQuery();
-		$record = df_get_record_by_id($query['-recordid']);
+		$record = $app->getRecord();
 		
 		if ( !array_key_exists('translation_memory_id' , $record->_values)) throw new Exception("No translation memory id was specified");
 		$id = $record->_values['translation_memory_id'];
