@@ -212,12 +212,12 @@
 					console.log('here');
 					console.log(fld);
 					$('a.xf-edit-field-translation', this.tr).click(function(){
-					    alert('here');
+					    //alert('here');
 						showForm(fld);
 						return false;
 					});
 				
-					if ( $(this.tr).hasClass('xf-field-translation-null') ){
+					if ( true || $(this.tr).hasClass('xf-field-translation-null') ){
 						showForm(this);
 					}
 				});
