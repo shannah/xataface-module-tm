@@ -135,7 +135,8 @@ class actions_translate {
 			$tfields = $tlangs[$dest];
 			
 			
-			$tr = $this->getTranslationRow($record, $dest);
+			//$tr = $this->getTranslationRow($record, $dest);
+			//print_r($tr); echo $dest;exit;
 		
 			$row['data'] = array();
 			
@@ -146,8 +147,9 @@ class actions_translate {
 				if ( isset($keys[$f]) ) continue;
 				$row['data'][$f]['fielddef'] = $record->table()->getField($f);
 				$row['data'][$f][$source] = $record->strval($f);
+				//echo $f;exit;
 				if ( $tr and isset($tr->{$f}) ){
-					$row['data'][$f][$dest] = $tr->{$f};
+					$row['data'][$f][$dest] = $tm->findTranslationByString($row['data'][$f][$source]);
 				}
 			}
 			$out[] = $row;

@@ -201,24 +201,23 @@
 		$('body').append(loading);
 		
 		tf.load(function(res){
-		
-			$(loading).remove();
+		    $(loading).remove();
 			if ( res.error ){
 				alert(res.error);
 			} else {
 				
 				$.each(tf.fields, function(){
 					var fld = this;
-					console.log('here');
-					console.log(fld);
+					//console.log('here');
+					//console.log(fld);
 					$('a.xf-edit-field-translation', this.tr).click(function(){
 					    //alert('here');
 						showForm(fld);
 						return false;
 					});
 				
-					if ( true || $(this.tr).hasClass('xf-field-translation-null') ){
-						showForm(this);
+					if ( $(this.tr).hasClass('xf-field-translation-null') ){
+					    showForm(fld);
 					}
 				});
 			
