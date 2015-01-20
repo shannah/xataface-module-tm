@@ -20,6 +20,7 @@ class actions_tm_import_from_xliff
 {	
 	public function handle(&$params)
 	{
+	    set_time_limit(0);
 		//the HTML data sent to the template	
 		$msg = "";
 		$url = "";
