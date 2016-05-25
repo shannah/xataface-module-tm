@@ -21,7 +21,7 @@ class actions_tm_update_word_index {
             $str = $row->string_value;
             $str = strip_tags($str);
             if ( !in_array($row->language, array('zh','zt','ko','ja')) ){
-                $str = html_entity_decode($str);
+                $str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
                 $str = preg_replace('/  /', ' ', $str);
                 $str = preg_replace('/[^a-zA-Z ]/', '', $str);
                 $words = explode(' ', $str);
