@@ -296,6 +296,11 @@ class XFTranslationMemory implements XFTranslationDictionary {
 	 *
 	 */
 	public function addTranslation($string, $translation, $username=null, $secure=false){
+	    // Find permutations
+	    $permutedString = preg_replace('#<g id=\"(\d+)"></g>#', '<x id="$1"/>', $string);
+	    if ($permutedString != $string) {
+	        $this->addTranslation($permutedString, preg_replace('#<g id=\"(\d+)"></g>#', '<x id="$1"/>', $translation), $username, $secure);
+	    }
 		if ( !$username ) $username = Dataface_AuthenticationTool::getInstance()->getLoggedInUserName();
 		$strid = null;
 		if ( is_int($string) ){
@@ -610,6 +615,10 @@ class XFTranslationMemory implements XFTranslationDictionary {
 	 * @endcode
 	 */
 	public function setTranslationStatus($string, $translation, $status, $username=null, $secure=false){
+	    $permutedString = preg_replace('#<g id=\"(\d+)"></g>#', '<x id="$1"/>', $string);
+	    if ($permutedString != $string) {
+	        $this->setTranslationStatus($permutedString, preg_replace('#<g id=\"(\d+)"></g>#', '<x id="$1"/>', $translation), $status, $username, $secure);
+	    }
 		df_q("start transaction");
 		try {
 			if ( !$username ) $username = Dataface_AuthenticationTool::getInstance()->getLoggedInUserName();
@@ -648,6 +657,7 @@ class XFTranslationMemory implements XFTranslationDictionary {
 			);
 			$doInsert = false;
             try {
+            	error_log("Updating strings");
                 $res = df_q("update xf_tm_translation_memory_strings set 
                     current_translation_id='".addslashes($trid)."', 
                     status_id='".addslashes($status)."',
@@ -657,7 +667,9 @@ class XFTranslationMemory implements XFTranslationDictionary {
                         translation_memory_id='".addslashes($tmid)."' and 
                         string_id='".addslashes($strid)."' and 
                         (status_id='".addslashes($status)."' or current_translation_id='".addslashes($trid)."')");
+                error_log("Affected rows: ". mysql_affected_rows(df_db()));
             } catch ( Exception $ex){
+            	error_log("Deleting entries because ".$ex->getMessage());
                 $res = df_q("delete from xf_tm_translation_memory_strings where 
                     translation_memory_id='".addslashes($tmid)."' and 
                     string_id='".addslashes($strid)."'");
@@ -665,18 +677,22 @@ class XFTranslationMemory implements XFTranslationDictionary {
                     
             }
 			if ( $doInsert or  mysql_affected_rows(df_db()) == 0 ){
-				$res = df_q("insert into xf_tm_translation_memory_strings (
-					translation_memory_id,
-					string_id,
-					status_id,
-					current_translation_id,
-					last_touched)
-					values (
-					'".addslashes($tmid)."',
-					'".addslashes($strid)."',
-					'".addslashes($status)."',
-					'".addslashes($trid)."',
-					NOW())");
+				try {
+					$res = df_q("insert into xf_tm_translation_memory_strings (
+						translation_memory_id,
+						string_id,
+						status_id,
+						current_translation_id,
+						last_touched)
+						values (
+						'".addslashes($tmid)."',
+						'".addslashes($strid)."',
+						'".addslashes($status)."',
+						'".addslashes($trid)."',
+						NOW())");
+				} catch ( Exception $ex){
+					error_log("Failed to insert string $strid into translation memory $tmid with status $status and translation $trid because ".$ex->getMessage());
+				}
 			}
 			
 			$event = new stdClass;
